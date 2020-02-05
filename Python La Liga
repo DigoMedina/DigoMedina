@@ -1,0 +1,27 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import numpy as np
+
+url = 'https://fbref.com/en/comps/12/history/La-Liga-Seasons'
+html=requests.get(url)
+text=BeautifulSoup(html.text,'html.parser')
+
+
+links=[]
+tables=text.find('table')
+tables_body=tables.tbody
+tables_body_rows=tables_body.findAll('tr')
+for row in tables_body_rows:
+    b=row.a.get('href')
+    link='https://fbref.com' + b
+    links.append(link)
+links
+
+
+
+req=requests.get(link).text
+soup=BeautifulSoup(req,'html.parser')
+table2=soup.find('table')
+tb2=table2.tbody
+tbr2=tb2.findAll('tr')

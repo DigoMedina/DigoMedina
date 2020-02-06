@@ -1,3 +1,5 @@
+#get all the links from href
+
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -7,71 +9,97 @@ url = 'https://fbref.com/en/comps/12/history/La-Liga-Seasons'
 html=requests.get(url)
 text=BeautifulSoup(html.text,'html.parser')
 
-#getting the links in href and saving it in a list
+season=[]
 links=[]
 tables=text.find('table')
 tables_body=tables.tbody
 tables_body_rows=tables_body.findAll('tr')
 for row in tables_body_rows:
+    c=row.find('th',{'data-stat':'season'}).text
     b=row.a.get('href')
     link='https://fbref.com' + b
     links.append(link)
-links
-
-
-#getting data from the table
-req=requests.get(link).text
-soup=BeautifulSoup(req,'html.parser')
-table2=soup.find('table')
-tb2=table2.tbody
-tbr2=tb2.findAll('tr')
-
-#creating the dictionary with the tables
-laliga_final=[]
-for i in tbr2:
-    ano=
-    rank=i.find('th',{'data-stat':'rank'}).text
-    squad=i.find('td',{'data-stat':'squad'}).text
-    games=i.find('td',{'data-stat':'games'}).text
-    wins=i.find('td',{'data-stat':'wins'}).text
-    draws=i.find('td',{'data-stat':'draws'}).text
-    losses=i.find('td',{'data-stat':'losses'}).text
-    goals_for=i.find('td',{'data-stat':'goals_for'}).text
-    goals_against=i.find('td',{'data-stat':'goals_against'}).text
-    goal_diff=i.find('td',{'data-stat':'goal_diff'}).text
-    points=i.find('td',{'data-stat':'points'}).text
-    xg=i.find('td',{'data-stat':'xg'}).text                       #expected goals
-    xga=i.find('td',{'data-stat':'xga'}).text                     #expected goals allowed
-    xg_diff=i.find('td',{'data-stat':'xg_diff'}).text              #expected goals differential
-    xg_diff_per90=i.find('td',{'data-stat':'xg_diff_per90'}).text  #expected goals differential per 90 min
-    last_5=i.find('td',{'data-stat':'last_5'}).text                #last 5 matches
-    attendance_per_game=i.find('td',{'data-stat':'attendance_per_g'}).text
-    top_team_scorers=i.find('td',{'data-stat':'top_team_scorers'}).text
-    top_keeper=i.find('td',{'data-stat':'top_keeper'}).text
-    notes=i.find('td',{'data-stat':'notes'}).text
-
-    laliga={}
-
-    laliga['Rank']=rank
-    laliga['Squad']=squad
-    laliga['Games']=games
-    laliga['Wins']=wins
-    laliga['Draws']=draws
-    laliga['Losses']=losses
-    laliga['Goals For']=goals_for
-    laliga['Goals Against']=goals_against
-    laliga['Goals Difference']=goal_diff
-    laliga['Points']=points
-    laliga['Expected Goals']=xg
-    laliga['Expected Goals Allowed']=xga
-    laliga['Expected Goals Differential']=xg_diff
-    laliga['Expected Goals Differential per 90 Minutes']=xg_diff_per90
-    laliga['Last 5 Matches']=last_5
-    laliga['Attendance Per Game']=attendance_per_game
-    laliga['Top Team Scorers']=top_team_scorers
-    laliga['Top Keeper']=top_keeper
-    laliga['Notes']=notes
-    laliga_final.append(laliga)
+    season.append(c)
     
+    
+#get the collumns from the tables in all links
+laliga_final=[]
+data=[]
+for link in links:
+    ano=link.find('')
+    req=requests.get(link).text
+    soup=BeautifulSoup(req,'html.parser')
+    table2=soup.find('table')
+    tb2=table2.tbody
+    tbr2=tb2.findAll('tr')
+    data=tbr2
+
+    
+    for i in data:
+        
+        #seasons=j.find('th',{'data-stat':'season'}).text
+        rank=i.find('th',{'data-stat':'rank'}).text
+        squad=i.find('td',{'data-stat':'squad'}).text
+        games=i.find('td',{'data-stat':'games'}).text
+        wins=i.find('td',{'data-stat':'wins'}).text
+        draws=i.find('td',{'data-stat':'draws'}).text
+        losses=i.find('td',{'data-stat':'losses'}).text
+        goals_for=i.find('td',{'data-stat':'goals_for'}).text
+        goals_against=i.find('td',{'data-stat':'goals_against'}).text
+        goal_diff=i.find('td',{'data-stat':'goal_diff'}).text
+        points=i.find('td',{'data-stat':'points'}).text
+        #xg=i.find('td',{'data-stat':'xg'}).text                       #expected goals
+        #xga=i.find('td',{'data-stat':'xga'}).text                     #expected goals allowed
+        #xg_diff=i.find('td',{'data-stat':'xg_diff'}).text              #expected goals differential
+        #xg_diff_per90=i.find('td',{'data-stat':'xg_diff_per90'}).text  #expected goals differential per 90 min
+        #last_5=i.find('td',{'data-stat':'last_5'}).text                #last 5 matches
+        attendance_per_game=i.find('td',{'data-stat':'attendance_per_g'}).text
+        top_team_scorers=i.find('td',{'data-stat':'top_team_scorers'}).text
+        top_keeper=i.find('td',{'data-stat':'top_keeper'}).text
+        notes=i.find('td',{'data-stat':'notes'}).text
+        
+        laliga={}
+        #laliga['Year']=seasons
+        laliga['Rank']=rank
+        laliga['Squad']=squad
+        laliga['Games']=games
+        laliga['Wins']=wins
+        laliga['Draws']=draws
+        laliga['Losses']=losses
+        laliga['Goals For']=goals_for
+        laliga['Goals Against']=goals_against
+        laliga['Goals Difference']=goal_diff
+        laliga['Points']=points
+        #laliga['Expected Goals']=xg
+        #laliga['Expected Goals Allowed']=xga
+        #laliga['Expected Goals Differential']=xg_diff
+        #laliga['Expected Goals Differential per 90 Minutes']=xg_diff_per90
+        #laliga['Last 5 Matches']=last_5
+        laliga['Attendance Per Game']=attendance_per_game
+        laliga['Top Team Scorers']=top_team_scorers
+        laliga['Top Keeper']=top_keeper
+        laliga['Notes']=notes
+        laliga_final.append(laliga)
+
 df=pd.DataFrame(laliga_final)
+
+lista2=[]
+tables_body_rows
+tables_body_rows=tables_body.findAll('tr')
+for row in tables_body_rows:
+    c=row.find('th',{'data-stat':'season'}).text
+    lista2.append(c)
+    
+dt2=[]
+for i in lista2:
+    for j in range(20):
+        e=i
+        d={}
+        d['Season']=e
+        dt2.append(d)
+        j+=j
+dt2=pd.DataFrame(dt2)
+frames=[df,dt2]
+df=pd.concat(frames,axis=1)
 df
+write=df.to_excel('LaLiga20seasonsStats.xlsx')

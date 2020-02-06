@@ -103,3 +103,27 @@ frames=[df,dt2]
 df=pd.concat(frames,axis=1)
 df
 write=df.to_excel('LaLiga20seasonsStats.xlsx')
+
+
+df['Top Scorer Player']=df['Top Team Scorers'].str.split('-').str[0]
+df['Goals In Season']=df['Top Team Scorers'].str.split('-').str[1]
+
+
+del df['Top Team Scorers']
+
+cols=df.columns.tolist()
+
+cols=['Rank',
+ 'Squad',
+ 'Games',
+ 'Wins',
+ 'Draws',
+ 'Losses',
+ 'Goals For',
+ 'Goals Against',
+ 'Goals Difference',
+ 'Points',
+ 'Attendance Per Game','Top Scorer Player',
+ 'Goals In Season','Season','Top Keeper','Notes']
+
+df=df[cols]
